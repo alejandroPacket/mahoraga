@@ -732,7 +732,7 @@ export function createWebUI(config) {
 
             const sessionToken = generateSessionToken();
             const sessionHash = await sha256(sessionToken);
-            const ownerId = 'web:owner';
+            const ownerId = 'cli:owner';
 
             if (!configManager || !secretsManager) {
               return jsonResponse({ error: 'Server setup managers are not available.' }, 500);
@@ -1196,7 +1196,7 @@ export function createWebUI(config) {
             if (!(await isOwnerRequest(request))) {
               return jsonResponse({ error: 'Unauthorized' }, 401);
             }
-            const userId = url.searchParams.get('userId') || 'web:owner';
+            const userId = url.searchParams.get('userId') || 'cli:owner';
             const tasks = getBackgroundTasks ? getBackgroundTasks(userId) : [];
             return jsonResponse({ tasks });
           }
@@ -1264,7 +1264,7 @@ export function createWebUI(config) {
             if (!(await isOwnerRequest(request))) {
               return jsonResponse({ error: 'Unauthorized' }, 401);
             }
-            const userId = url.searchParams.get('userId') || 'web:owner';
+            const userId = url.searchParams.get('userId') || 'cli:owner';
             try {
               const agents = getSubAgents ? getSubAgents(userId) : [];
               return jsonResponse({ agents });
@@ -1280,7 +1280,7 @@ export function createWebUI(config) {
               return jsonResponse({ error: 'Unauthorized' }, 401);
             }
 
-            const userId = configManager?.get<string>('owner.ownerId') || 'web:owner';
+            const userId = configManager?.get<string>('owner.ownerId') || 'cli:owner';
 
             // Build a proactive welcome prompt
             const seed = configManager?.get<number>('heartware.seed');
@@ -1373,7 +1373,7 @@ export function createWebUI(config) {
               return jsonResponse({ error: 'Unauthorized' }, 401);
             }
 
-            const userId = configManager?.get<string>('owner.ownerId') || 'web:owner';
+            const userId = configManager?.get<string>('owner.ownerId') || 'cli:owner';
 
             // Build a restart-aware prompt
             const seed = configManager?.get<number>('heartware.seed');
@@ -1473,7 +1473,7 @@ export function createWebUI(config) {
 
             const message = body?.message || '';
             // Owner always uses the owner userId
-            const userId = configManager?.get<string>('owner.ownerId') || 'web:owner';
+            const userId = configManager?.get<string>('owner.ownerId') || 'cli:owner';
             const wantsStream = Boolean(body?.stream);
 
             if (!message) {

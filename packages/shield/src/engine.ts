@@ -28,7 +28,7 @@ import { parseShieldContent } from './parser.js';
 // ---------------------------------------------------------------------------
 
 /** Confidence threshold per SHIELD.md v0.1 spec. */
-const CONFIDENCE_THRESHOLD = 0.85;
+const CONFIDENCE_THRESHOLD = 0.97;
 
 /** Action priority: higher number = stronger action. */
 const ACTION_PRIORITY: Record<ShieldAction, number> = {

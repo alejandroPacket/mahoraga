@@ -1,184 +1,45 @@
-# Tiny Claw (Mandibles) 🐜
+# MAHORAGA
+## Sistema Multiagente de Ciberdefensa
 
-> [!NOTE]
-> **Tiny Claw is NOT a smaller version of OpenClaw.** It is a completely independent product and an alternative to OpenClaw. While the original idea and inspiration came from OpenClaw (the lobster 🦞), Tiny Claw (the ant 🐜) has its own mission, architecture, and identity built from the ground up.
+MAHORAGA es una arquitectura multiagente de ciberdefensa defensiva implementada sobre TinyClaw v2.0.0. El sistema procesa alertas de seguridad a traves de un pipeline de agentes de IA especializados.
 
-![GitHub Repo Banner](https://ghrb.waren.build/banner?header=%F0%9F%90%9CTiny+Claw&subheader=Your+autonomous+AI+companion.&bg=F3F4F6&color=31373D&subheadercolor=31373D&headerfont=Caveat+Brush&subheaderfont=Schoolbell&watermarkpos=bottom-right)
-<!-- Created with GitHub Repo Banner by Waren Gonzaga: https://ghrb.waren.build -->
+## Pipeline de agentes
 
-**Your autonomous AI companion.**
+Oracle (Orquestador) -> SENTINEL (Triage) -> ATLAS (MITRE ATT&CK) -> AEGIS (Respuesta)
 
-> [!WARNING]
-> **🚧 Under Active Development** - This project is in heavy development and things will break. Running it now may spoil the experience we're building for you. Please wait for the first official release before trying it out. Follow [@TinyClawAI](https://x.com/TinyClawAI) and [@warengonzaga](https://x.com/warengonzaga) on X for launch updates.
+## Agentes
 
-> [!CAUTION]
-> **🚫 No Crypto Token** — Tiny Claw has **NO** official token, coin, or cryptocurrency and we have no plans to create one. If you see any token using Tiny Claw's name, it is **not affiliated** with this project. The only way to support Tiny Claw is through [GitHub Sponsors](https://github.com/sponsors/warengonzaga) or [Buy Me a Coffee](https://buymeacoffee.com/warengonzaga). 🙏
+| Agente   | Rol |
+|----------|-----|
+| Oracle   | Orquestador -- coordina el pipeline y sintetiza resultados |
+| SENTINEL | Triage -- extrae IOCs y asigna severidad |
+| ATLAS    | Correlacion MITRE ATT&CK -- mapea indicadores a tacticas |
+| AEGIS    | Asesor de respuesta -- genera plan sin ejecutar acciones |
 
-AI agents today are powerful but complex, expensive to run, and heavy to set up. Tiny Claw believes AI should be **simple, affordable, and truly personal**, like having your own Codsworth or AYLA as a helpful friend. It achieves this by being a **native framework built from scratch** with a tiny core, plugin architecture, self-improving memory, and smart routing that tiers queries to cut costs. The result is an **autonomous, self-improving, self-learning, and self-configuring personal AI companion** that grows with you over time.
+## Stack de seguridad
 
-Think of the **personal computer revolution**. Computers were once reserved for governments, military, and large corporations. Having one meant building it yourself or spending serious money. Then Apple came along and made them personal and accessible to everyone. Tiny Claw does the same for AI agents.
+- Suricata -- IDS/IPS para deteccion de trafico malicioso
+- Wazuh -- SIEM para correlacion de logs
+- Osquery -- Monitoreo del sistema operativo
+- TinyClaw v2.0.0 -- Motor de agentes de IA
 
-## ❓ Why Tiny Claw?
+## Estructura del proyecto
 
-Most AI agent frameworks are powerful but heavy. They require expensive subscriptions, complex setup, and are built on top of other frameworks. Tiny Claw takes a different approach. It's built from scratch, cheap to run, and treats you as a friend, not just a user to be served.
+mahoraga/
+- seeds/                   # Definicion de personalidad de cada agente
+- middleware/               # Normalizacion de alertas al schema SENTINEL
+- mahoraga_suricata.py      # Normalizador Suricata (funcional)
+- escribir_agents_md.py     # Script de instalacion de seeds
 
-| | Tiny Claw 🐜 | Other AI Agent Frameworks |
-|---|---|---|
-| **Architecture** | Native framework, built from scratch | Built on existing frameworks (Pi, Claude Code, Codex) |
-| **Philosophy** | Personal companion with its own personality | Configurable assistant you shape from scratch |
-| **Core size** | Tiny by design, everything else is a plugin | Large monolith that grows over time |
-| **Personality** | Has its own, you can't override it | Fully configurable system prompts |
-| **Memory** | Self-improving with temporal decay | Flat conversation history |
-| **Context** | 4-layer compaction keeps context small and cheap | Unbounded context windows burn tokens |
-| **Security** | Built-in SHIELD.md anti-malware enforcement | No native threat model |
-| **UI** | Discord-like web experience out of the box | Terminal-only or separate UI dependency |
-| **Setup** | Self-configuring, zero hassle | Complex onboarding with multiple dependencies |
-| **Runtime** | Bun-native, single binary | Node.js 22+, pnpm, multiple processes |
-| **Built-in Provider** | Ollama Cloud (free sign-up, generous free tier) | Requires Claude Pro/Max ($20-200/mo) or API keys |
-| **Cost** | Smart routing slashes LLM spend by tiering queries | Every query hits the most expensive model |
-| **Routing** | Adapts to whichever provider plugins you install | Hardcoded to a single provider |
+## Requisitos
 
-## 💡 Philosophy
+- Pop!_OS / Ubuntu 22.04+
+- Bun runtime
+- Python 3.10+
+- TinyClaw v2.0.0
+- Suricata 6.0+
+- API key de Google AI Studio (Gemini 2.0 Flash)
 
-Tiny Claw is inspired by personal AI companions from science fiction like **Codsworth** from Fallout (the loyal robot butler) and **AYLA** from Deliver Us Mars (the autonomous drone companion). It's not designed to be your employee or your robot slave. It's designed to be your **helpful friend** that can assist with your work, your projects, and your daily life, but on its own terms.
+## Equipo
 
-**The ant metaphor is intentional.** A single ant is tiny, but it's autonomous, it learns, it adapts, and it builds something greater over time. That's Tiny Claw. Small by design, mighty by nature. The name "Mandibles" refers to the ant's powerful jaws — tiny but capable of carrying many times their own weight.
-
-### Core Principles
-
-- **Personal, not enterprise.** Built for _you_, not your org chart. Helps with your work and business as a friend, not as a tool.
-- **Tiny core, plugin everything.** The core stays minimal. Channels, providers, and tools are all plugins.
-- **Self-improving.** Learns from every conversation via episodic memory with temporal decay.
-- **Self-configuring.** No manual config files. The agent configures itself through conversation.
-- **Own personality.** Ships with a personality (Heartware system) that's uniquely its own.
-- **Native, not wrapped.** Every component is built from scratch with zero dependency on external AI frameworks.
-- **Easy to start.** Uses Ollama Cloud with two built-in models — kimi-k2.5:cloud (default) and gpt-oss:120b-cloud. Choose your model during setup and switch anytime via conversation.
-- **Cost-conscious.** Smart routing tiers queries across your installed providers. Cheap models handle simple stuff, powerful models only fire when needed.
-
-## ✨ Features
-
-| | Feature | Description |
-|---|---|---|
-| 💬 | **Discord-Like UI** | Dark-themed web interface inspired by Discord with real-time SSE streaming, typing indicators, inline delegation event cards, and an active agents sidebar |
-| 🧠 | **Adaptive Memory** | 3-layer memory system (episodic, semantic FTS5, temporal decay) that learns what to remember and forget |
-| 🤖 | **Self-Improving** | Behavioral pattern detection that makes the agent better with every interaction |
-| 🔌 | **Plugin Architecture** | Channels, providers, and tools are all plugins. Core stays tiny |
-| 🎭 | **Heartware Personality** | Built-in personality engine with SOUL.md and IDENTITY.md. It has its own character |
-| 🧩 | **Smart Routing** | 8-dimension query classifier that adapts to your installed provider plugins, routing simple queries to cheap models and complex ones to powerful ones, cutting LLM costs |
-| 📐 | **Context Compactor** | 4-layer context compaction pipeline with rule-based pre-compression, shingle deduplication, LLM summarization, and tiered summaries (L0/L1/L2) |
-| 🛡️ | **SHIELD.md Anti-Malware** | Runtime SHIELD.md enforcement engine with threat parsing, pattern matching, and re-enforce action for built-in anti-malware protection |
-| 🔒 | **5-Layer Security** | Path sandbox, content validation, audit log, auto-backup, rate limiting |
-| 🏗️ | **Delegation System** | Autonomous sub-agent orchestration with self-improving role templates, blackboard collaboration, and adaptive timeout estimation |
-| 📡 | **Inter-Agent Comms** | Lightweight pub/sub event bus for real-time inter-agent communication with wildcard subscriptions and bounded history |
-| 💾 | **Easy Setup** | SQLite persistence with Ollama Cloud built-in. Free to sign up and start using immediately |
-| ⚡ | **Bun-Native** | Built on Bun for maximum performance, minimal footprint |
-| 🔄 | **Provider Fallback** | Multi-provider support (Ollama, OpenAI, Anthropic) with automatic failover |
-
-## 🏛️ Architecture
-
-![Architecture](.github/assets/architecture.png)
-
-Everything above the plugin line is the **tiny core**. Channels, extra providers, and additional tools live as plugins in `plugins/`.
-
-## 🚀 Quick Start
-
-### Install
-
-```bash
-bun install
-```
-
-### Run
-
-```bash
-bun start
-```
-
-Open [http://localhost:3000](http://localhost:3000). Tiny Claw will walk you through the rest. No config files needed.
-
-### Development
-
-```bash
-bun dev      # Development mode with hot reload
-bun build    # Build all packages
-bun test     # Run test suite
-```
-
-## 🔌 Plugin Development
-
-- Channel plugin guide: [`plugins/channel/README.md`](plugins/channel/README.md)
-
-## 📁 Project Structure
-
-```
-tinyclaw/
-  packages/          Core library packages (tiny, focused, no circular deps)
-    core/            Agent loop, database, built-in Ollama provider
-    types/           Shared interfaces (leaf dependency)
-    config/          Zod-validated configuration engine
-    compactor/       Context compaction engine (4-layer pipeline)
-    heartware/       Personality engine + safety layers
-    memory/          Adaptive memory with episodic + FTS5
-    delegation/      Sub-agent orchestration + blackboard
-    router/          Smart provider routing (8-dim classifier)
-    learning/        Behavioral pattern detection
-    sandbox/         Bun Worker code execution
-    shell/           Controlled shell execution with permission engine
-    shield/          Runtime SHIELD.md enforcement + anti-malware
-    pulse/           Cron-like proactive scheduler
-    queue/           Per-session message locking queue
-    intercom/        Pub/sub inter-agent communication
-    matcher/         Hybrid semantic matcher (TF-IDF + fuzzy + synonyms)
-    logger/          Singleton logger with emoji mappings
-    secrets/         Encrypted secrets management (AES-256-GCM)
-    plugins/         Plugin discovery and loading
-  plugins/           Plugin packages (keep the core tiny)
-    channel/         Messaging integrations (Discord, Friends, etc.)
-    provider/        LLM providers (OpenAI, etc.)
-  src/
-    cli/             CLI entry point
-    landing/         Official landing page (Svelte + Vite)
-    web/             Web UI (Svelte 5, Discord-like experience)
-```
-
-## 🐛 Issues
-
-Please report any issues and bugs by [creating a new issue here](https://github.com/warengonzaga/tinyclaw/issues/new/choose), also make sure you're reporting an issue that doesn't exist. Any help to improve the project would be appreciated. Thanks! 🙏✨
-
-## 🙏 Sponsor
-
-Like this project? Leave a star! ⭐⭐⭐⭐⭐
-
-Want to support my work and get some perks? [Become a sponsor](https://github.com/sponsors/warengonzaga)! 💖
-
-Or, you just love what I do? [Buy me a coffee](https://buymeacoffee.com/warengonzaga)! ☕
-
-Recognized my open-source contributions? [Nominate me](https://stars.github.com/nominate) as GitHub Star! 💫
-
-## 📋 Code of Conduct
-
-Read the project's [code of conduct](https://github.com/warengonzaga/tinyclaw/blob/main/CODE_OF_CONDUCT.md).
-
-## 📃 License
-
-This project is licensed under [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html).
-
-## 🙏 Credits
-
-- [OpenClaw](https://github.com/openclaw/openclaw) — original idea and inspiration
-- [ClawRouter](https://github.com/BlockRunAI/ClawRouter) — smart routing inspiration
-- [Claw Compactor](https://github.com/aeromomo/claw-compactor) — compactor inspiration
-- [Nader Dabit](https://x.com/dabit3) — learnings from [You Could've Invented OpenClaw](https://x.com/dabit3/status/2021387483364151451)
-- [SHIELD.md](https://nova-hunting.github.io/shield.md/) by [Thomas Roccia](https://x.com/fr0gger_) — security policy inspiration
-- [Bun](https://bun.sh) by [Oven](https://github.com/oven-sh) — all-in-one JavaScript runtime
-- [Secrets Engine](https://github.com/wgtechlabs/secrets-engine), [Config Engine](https://github.com/wgtechlabs/config-engine), and [Log Engine](https://github.com/wgtechlabs/log-engine) by [WG Tech Labs](https://github.com/wgtechlabs) — built for this project
-
-## 📝 Author
-
-This project is created by [Waren Gonzaga](https://github.com/warengonzaga), with the help of awesome [contributors](https://github.com/warengonzaga/tinyclaw/graphs/contributors).
-
-[![contributors](https://contrib.rocks/image?repo=warengonzaga/tinyclaw)](https://github.com/warengonzaga/tinyclaw/graphs/contributors)
-
----
-
-💻💖☕ by [Waren Gonzaga](https://warengonzaga.com) | [YHWH](https://www.youtube.com/watch?v=VOZbswniA-g) 🙏 - Without _Him_, none of this exists, _even me_.
+Proyecto de tesis -- Ingenieria en Ciberseguridad | Mayo 2026

@@ -1116,6 +1116,7 @@ export async function startCommand(): Promise<void> {
 
   // Register web UI as a channel sender (SSE push)
   gateway.register('web', webUI.getChannelSender());
+  gateway.register('cli', webUI.getChannelSender());
 
   // --- Nudge Engine -------------------------------------------------------
 

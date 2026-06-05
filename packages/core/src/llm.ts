@@ -108,7 +108,7 @@ export function createOllamaProvider(config: OllamaConfig): Provider {
     async chat(messages: Message[], tools?: Tool[]): Promise<LLMResponse> {
       try {
         // Resolve API key: explicit value or secrets-engine lookup
-        const apiKey = config.apiKey ?? (await config.secrets?.resolveProviderKey('ollama'));
+        const apiKey = config.apiKey ?? (await config.secrets?.resolveProviderKey('ollama') ?? config.secrets?.resolveProviderKey('openai'));
         if (!apiKey) {
           throw new Error(
             'No API key available for Ollama. ' +
@@ -199,7 +199,7 @@ export function createOllamaProvider(config: OllamaConfig): Provider {
 
     async isAvailable(): Promise<boolean> {
       try {
-        const apiKey = config.apiKey ?? (await config.secrets?.resolveProviderKey('ollama'));
+        const apiKey = config.apiKey ?? (await config.secrets?.resolveProviderKey('ollama') ?? config.secrets?.resolveProviderKey('openai'));
         if (!apiKey) return false;
 
         // Use the chat endpoint with a minimal ping message so we validate
@@ -220,6 +220,7 @@ export function createOllamaProvider(config: OllamaConfig): Provider {
 
         // Surface auth errors explicitly so callers can distinguish
         // "provider is down" from "bad API key"
+        if (response.status === 429) { return true; }
         if (response.status === 401 || response.status === 403) {
           const body = await response.text().catch(() => '');
           throw new Error(
@@ -227,7 +228,7 @@ export function createOllamaProvider(config: OllamaConfig): Provider {
           );
         }
 
-        return response.ok;
+        console.error("STATUS:", response.status, baseUrl, model); return response.ok;
       } catch (err) {
         // Re-throw auth errors so they propagate to the caller
         if (err instanceof Error && err.message.startsWith('Authentication failed')) {
